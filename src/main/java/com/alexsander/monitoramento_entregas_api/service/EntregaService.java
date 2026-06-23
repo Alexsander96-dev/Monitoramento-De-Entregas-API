@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -49,7 +51,7 @@ public class EntregaService {
 
         entrega.setPedido(pedidoEncontrado.get());
         entrega.setEntregador(entregadorEncontrado.get());
-        entrega.setStatus(StatusEntrega.CRIADO);
+        entrega.setStatus(StatusEntrega.AGUARDANDO_ENTREGADOR);
 
         entregaRepository.save(entrega);
 
@@ -74,7 +76,7 @@ public class EntregaService {
         Entregador entregador = entrega.getEntregador();
 
 
-        if (entrega.getStatus() != StatusEntrega.CRIADO) {
+        if (entrega.getStatus() != StatusEntrega.AGUARDANDO_ENTREGADOR) {
             throw new RuntimeException("Entrega não pode ser iniciada. Status atual da entrega: " + entrega.getStatus());
         }
 
@@ -102,6 +104,145 @@ public class EntregaService {
                 entregaSalva.getStatus(),
                 entregaSalva.getDataInicio(),
                 entregaSalva.getDataConclusao());
+
+    }
+
+    public EntregaResponseDTO concluirEntrega(Long id){
+        Optional<Entrega> entrega = entregaRepository.findById(id);
+        if (entrega.isEmpty()){
+            throw new RuntimeException("Entrega não encontrada");
+        }
+
+        Entrega entregaEncontrada = entrega.get();
+        Pedido pedido = entregaEncontrada.getPedido();
+        Entregador entregador = entregaEncontrada.getEntregador();
+
+        if (entregaEncontrada.getStatus() != StatusEntrega.EM_ROTA){
+            throw new RuntimeException("ERRO: Entrega só pode ser concluida se estiver status de EM_ROTA!");
+        }
+
+        if (pedido.getStatus() != StatusPedido.EM_ROTA){
+            throw new RuntimeException("ERRO: Pedido so pode ser concluido se estiver em status EM_ROTA!");
+        }
+
+        entregaEncontrada.setStatus(StatusEntrega.ENTREGUE);
+        pedido.setStatus(StatusPedido.ENTREGUE);
+        entregador.setStatus(StatusEntregador.DISPONIVEL);
+        entregaEncontrada.setDataConclusao(LocalDateTime.now());
+
+        Entrega entregaAtualizada = entregaRepository.save(entregaEncontrada);
+
+        return new EntregaResponseDTO(entregaAtualizada.getId(),
+                entregaAtualizada.getPedido().getId(),
+                entregaAtualizada.getEntregador().getId(),
+                entregaAtualizada.getStatus(),
+                entregaAtualizada.getDataInicio(),
+                entregaAtualizada.getDataConclusao());
+
+    }
+
+    public EntregaResponseDTO cancelarEntrega(Long id){
+        Optional<Entrega> entrega = entregaRepository.findById(id);
+
+        if (entrega.isEmpty()){
+            throw new RuntimeException("Entrega não encontrada");
+        }
+
+        Entrega entregaEncontrada = entrega.get();
+        Pedido pedido = entregaEncontrada.getPedido();
+        Entregador entregador = entregaEncontrada.getEntregador();
+
+        if (entregaEncontrada.getStatus() != StatusEntrega.AGUARDANDO_ENTREGADOR){
+            throw new RuntimeException("ERRO: Entrega esta com status diferente de AGUARDANDO_ENTREGADOR");
+        }
+
+        entregaEncontrada.setStatus(StatusEntrega.CANCELADO);
+        pedido.setStatus(StatusPedido.PENDENTE);
+        entregador.setStatus(StatusEntregador.DISPONIVEL);
+        entregaEncontrada.setDataConclusao(LocalDateTime.now());
+
+        Entrega entregaCancelada = entregaRepository.save(entregaEncontrada);
+        return  new EntregaResponseDTO(entregaCancelada.getId(),
+                entregaCancelada.getPedido().getId(),
+                entregaCancelada.getEntregador().getId(),
+                entregaCancelada.getStatus(),
+                entregaCancelada.getDataInicio(),
+                entregaCancelada.getDataConclusao());
+    }
+
+    public EntregaResponseDTO registrarFalhaNaEntrega(Long id){
+        Optional<Entrega> entrega = entregaRepository.findById(id);
+
+        if (entrega.isEmpty()){
+            throw new RuntimeException("Entrega não encontrada");
+        }
+
+        Entrega entregaEncontrada = entrega.get();
+        Pedido pedido = entregaEncontrada.getPedido();
+        Entregador entregador = entregaEncontrada.getEntregador();
+
+        if (entregaEncontrada.getStatus() != StatusEntrega.EM_ROTA){
+            throw new RuntimeException("Só entregas em rota pode ter falha");
+        }
+
+        if (pedido.getStatus() != StatusPedido.EM_ROTA){
+            throw new RuntimeException("Só pedidos em rota que pode ter falha");
+        }
+
+        entregaEncontrada.setStatus(StatusEntrega.FALHA);
+        pedido.setStatus(StatusPedido.FALHA);
+        entregador.setStatus(StatusEntregador.DISPONIVEL);
+        entregaEncontrada.setDataConclusao(LocalDateTime.now());
+
+        Entrega entregaComFalha = entregaRepository.save(entregaEncontrada);
+
+        return  new EntregaResponseDTO(entregaComFalha.getId(),
+                entregaComFalha.getPedido().getId(),
+                entregaComFalha.getEntregador().getId(),
+                entregaComFalha.getStatus(),
+                entregaComFalha.getDataInicio(),
+                entregaComFalha.getDataConclusao());
+    }
+
+    public List<EntregaResponseDTO> listarEntregas(){
+        List<Entrega> entregasEncontradas = entregaRepository.findAll();
+
+        List<EntregaResponseDTO> entregas = entregasEncontradas.stream()
+                .map(entrega -> {
+                    Long entregadorId = entrega.getEntregador() != null ? entrega.getEntregador().getId() : null;
+                    return new EntregaResponseDTO(
+                            entrega.getId(),
+                            entrega.getPedido().getId(),
+                            entregadorId,
+                            entrega.getStatus(),
+                            entrega.getDataInicio(),
+                            entrega.getDataConclusao()
+                    );
+                })
+                .collect(Collectors.toList());
+
+        return entregas;
+    }
+
+    public EntregaResponseDTO buscarEntregaPorId(Long id){
+        Optional<Entrega> entrega = entregaRepository.findById(id);
+
+        if (entrega.isEmpty()){
+            throw new RuntimeException("Entrega não encontrada");
+        }
+
+        Entrega entregaValida = entrega.get();
+
+        Long entregadorId = entregaValida.getEntregador() != null ? entregaValida.getEntregador().getId() : null;
+
+        return new EntregaResponseDTO(
+                entregaValida.getId(),
+                entregaValida.getPedido().getId(),
+                entregadorId,
+                entregaValida.getStatus(),
+                entregaValida.getDataInicio(),
+                entregaValida.getDataConclusao()
+        );
 
     }
 }
