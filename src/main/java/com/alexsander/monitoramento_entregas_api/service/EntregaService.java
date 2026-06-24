@@ -47,11 +47,18 @@ public class EntregaService {
             throw new RuntimeException("Entregador não pode ser colocado nessa entrega pois esta: " + entregadorEncontrado.get().getStatus());
         }
 
+        boolean existeEntregaEmAberto = entregaRepository.existsByPedidoIdAndStatusIn(
+                pedidoEncontrado.get().getId(), List.of(StatusEntrega.CRIADO, StatusEntrega.EM_ROTA));
+
+        if (existeEntregaEmAberto) {
+            throw new RuntimeException("Já existe uma entrega em andamento para este pedido.");
+        }
+
         Entrega entrega = new Entrega();
 
         entrega.setPedido(pedidoEncontrado.get());
         entrega.setEntregador(entregadorEncontrado.get());
-        entrega.setStatus(StatusEntrega.AGUARDANDO_ENTREGADOR);
+        entrega.setStatus(StatusEntrega.CRIADO);
 
         entregaRepository.save(entrega);
 
@@ -76,7 +83,7 @@ public class EntregaService {
         Entregador entregador = entrega.getEntregador();
 
 
-        if (entrega.getStatus() != StatusEntrega.AGUARDANDO_ENTREGADOR) {
+        if (entrega.getStatus() != StatusEntrega.CRIADO) {
             throw new RuntimeException("Entrega não pode ser iniciada. Status atual da entrega: " + entrega.getStatus());
         }
 
@@ -152,8 +159,8 @@ public class EntregaService {
         Pedido pedido = entregaEncontrada.getPedido();
         Entregador entregador = entregaEncontrada.getEntregador();
 
-        if (entregaEncontrada.getStatus() != StatusEntrega.AGUARDANDO_ENTREGADOR){
-            throw new RuntimeException("ERRO: Entrega esta com status diferente de AGUARDANDO_ENTREGADOR");
+        if (entregaEncontrada.getStatus() != StatusEntrega.CRIADO){
+            throw new RuntimeException("ERRO: Entrega esta com status diferente de CRIADO");
         }
 
         entregaEncontrada.setStatus(StatusEntrega.CANCELADO);
