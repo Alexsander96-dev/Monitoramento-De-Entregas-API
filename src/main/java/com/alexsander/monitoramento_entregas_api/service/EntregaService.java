@@ -238,17 +238,17 @@ public class EntregaService {
             throw new RuntimeException("Entrega não encontrada");
         }
 
-        Entrega entregaValida = entrega.get();
+        Entrega entregaEncontrada = entrega.get();
 
-        Long entregadorId = entregaValida.getEntregador() != null ? entregaValida.getEntregador().getId() : null;
+        Long entregadorId = entregaEncontrada.getEntregador() != null ? entregaEncontrada.getEntregador().getId() : null;
 
         return new EntregaResponseDTO(
-                entregaValida.getId(),
-                entregaValida.getPedido().getId(),
+                entregaEncontrada.getId(),
+                entregaEncontrada.getPedido().getId(),
                 entregadorId,
-                entregaValida.getStatus(),
-                entregaValida.getDataInicio(),
-                entregaValida.getDataConclusao()
+                entregaEncontrada.getStatus(),
+                entregaEncontrada.getDataInicio(),
+                entregaEncontrada.getDataConclusao()
         );
 
     }
