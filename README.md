@@ -1,218 +1,144 @@
-# 🚚 Monitoramento de Entregas API
+# 🏍️ MotoTrack — Plataforma de Monitoramento de Motoboys em Tempo Real
 
-API REST desenvolvida em Java com Spring Boot para gerenciamento e monitoramento de entregas em tempo real.
-
-O projeto permite cadastrar pedidos, entregadores e entregas, registrar o histórico de localizações e acompanhar a posição do entregador utilizando WebSocket (STOMP).
-
-> ⚠️ Projeto em desenvolvimento. Novas funcionalidades estão sendo adicionadas continuamente.
-
----
-
-## ✨ Funcionalidades
-
-### 📦 Pedidos
-- Criar pedido
-- Listar pedidos
-- Buscar pedido por ID
-- Atualizar pedido
-- Excluir pedido
-
-### 🚴 Entregadores
-- Criar entregador
-- Listar entregadores
-- Buscar entregador por ID
-- Atualizar entregador
-- Excluir entregador
-
-### 🚚 Entregas
-- Criar entrega
-- Iniciar entrega
-- Concluir entrega
-- Cancelar entrega
-- Registrar falha da entrega
-- Listar entregas
-- Buscar entrega por ID
-
-### 📍 Localizações
-- Registrar localização via REST
-- Registrar localização via WebSocket
-- Buscar localização por ID
-- Listar localizações
-- Listar localizações por entrega
-
-### ⚡ Comunicação em Tempo Real
-- WebSocket com STOMP
-- Publicação de localização em tempo real
-- Histórico de localizações
-- Salas individuais por entrega (`/topic/entregas/{id}`)
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk" alt="Java 21" />
+  <img src="https://img.shields.io/badge/Spring%20Boot-3.3.2-brightgreen?style=for-the-badge&logo=springboot" alt="Spring Boot" />
+  <img src="https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind%20CSS-v4-38bdf8?style=for-the-badge&logo=tailwindcss" alt="Tailwind CSS v4" />
+  <img src="https://img.shields.io/badge/WebSocket-STOMP-blueviolet?style=for-the-badge&logo=socketdotio" alt="WebSocket STOMP" />
+</p>
 
 ---
 
-# 🏗 Arquitetura
+## 📋 Sobre o Projeto
 
-```
-Controller
-     │
-     ▼
- Service
-     │
-     ▼
-Repository
-     │
-     ▼
-PostgreSQL
-```
+O **MotoTrack** é uma solução corporativa de alta performance para monitoramento e rastreamento de entregas por motoboys em tempo real. A plataforma permite gerenciar pedidos, alocar entregadores, atualizar o status das rotas e rastrear graficamente a geolocalização dos motoboys no mapa à medida que as coordenadas são transmitidas via conexões WebSocket bidirecionais estáveis.
 
-### Fluxo WebSocket
-
-```
-Entregador
-      │
-      ▼
-WebSocket (/app)
-      │
-      ▼
-Controller
-      │
-      ▼
-Service
-      │
-      ▼
-PostgreSQL
-      │
-      ▼
-SimpMessagingTemplate
-      │
-      ▼
-/topic/entregas/{id}
-      │
-      ▼
-Cliente acompanha em tempo real
-```
+O ecossistema divide-se em um **Backend robusto em Java com Spring Boot** (responsável pelo gerenciamento transacional de dados e mensageria WebSocket) e um **Frontend moderno em React com TypeScript** inspirado nos melhores dashboards SaaS de observabilidade logística do mercado.
 
 ---
 
-# 🛠 Tecnologias
+## ✨ Funcionalidades Principais
 
-- Java 21
-- Spring Boot
-- Spring Web
-- Spring Data JPA
-- Spring WebSocket (STOMP)
-- SockJS
-- PostgreSQL
-- Maven
+### 📊 Dashboard Operacional (Overview)
+- Métricas consolidadas em tempo real: *Total de Entregas*, *Em Trânsito*, *Concluídas* e *Falhas/Atrasos*.
+- Gráfico dinâmico de produtividade integrando volumes de entregas e localizações transmitidas por hora.
+- Timeline de alertas rápidos e listagem reativa das últimas ações do sistema.
 
----
+### 🚴 Painel de Gestão Logística (Entregas)
+- Controle do ciclo de vida das entregas: Criação, Inicialização da rota (`CRIADO` -> `EM_ROTA`), Conclusão, Cancelamento e Registro de falhas.
+- Badges de status dinâmicos e informativos.
+- Filtros por ID e situação logística com carregamentos assíncronos fluidos.
 
-# 📁 Estrutura do Projeto
+### 📍 Mapa de Rastreamento Geográfico (Mapa)
+- Renderização baseada em **Leaflet** com visual dark minimalista.
+- Atualização em tempo real da posição dos entregadores ativos sem recarregar a tela.
+- Ajuste automático de zoom de acordo com o agrupamento dos pontos de entrega.
 
-```
-src
- ├── controller
- ├── websocket
- ├── dto
- ├── model
- ├── repository
- ├── service
- ├── config
- └── exception
-```
+### 📡 Console de Monitoramento e Testes WebSocket
+- Timeline de eventos com transições suaves (**Framer Motion**) separando logs de conexão, inscrições e geolocalizações recebidas.
+- Formulário operacional de simulação: possibilita simular um entregador enviando coordenadas GPS (`Latitude` e `Longitude`) para tópicos ativos e ver o resultado imediato no mapa.
+
+### ⚙️ Administração e Configurações (Config)
+- CRUD completo de **Pedidos** (Cliente, Endereço de Entrega, Status).
+- CRUD completo de **Entregadores** (Nome, Telefone, Disponibilidade).
 
 ---
 
-# 🚀 Como executar
-
-### Clone o projeto
-
-```bash
-git clone https://github.com/SEU-USUARIO/monitoramento-entregas-api.git
-```
-
-### Acesse a pasta
-
-```bash
-cd monitoramento-entregas-api
-```
-
-### Configure o banco PostgreSQL
-
-Atualize o arquivo:
+## 🏗 Arquitetura do Sistema
 
 ```
-application.properties
+                        ┌─────────────────────────────────┐
+                        │      MotoTrack React Client     │
+                        │       (Vite + TS + Tailwind)    │
+                        └───────┬─────────────────▲───────┘
+                                │                 │
+                       REST API │                 │ WebSocket
+                       (JSON)   │                 │ (STOMP / SockJS)
+                                ▼                 │
+                        ┌─────────────────────────┴───────┐
+                        │     Spring Boot Rest Controller │
+                        ├─────────────────────────────────┤
+                        │     Spring WebSocket Broker     │
+                        └───────┬─────────────────▲───────┘
+                                │                 │
+                   JPA & Driver │                 │ H2 In-Memory
+                                ▼                 │ DB (Dev)
+                        ┌─────────────────────────┴───────┐
+                        │       PostgreSQL / H2 DB        │
+                        └─────────────────────────────────┘
 ```
 
-com suas credenciais.
-
-### Execute
-
-```bash
-mvn spring-boot:run
-```
-
-A API ficará disponível em:
-
-```
-http://localhost:8080
-```
+### Protocolo de Comunicação WebSocket
+- **Endpoint Principal**: `/ws` (com suporte a SockJS fallback)
+- **Canal de Inscrição**: `/topic/entregas/{entregaId}` (recebimento de geolocalizações em tempo real)
+- **Canal de Envio**: `/app/entregas/{entregaId}/localizacao` (transmissão de coordenadas do entregador)
 
 ---
 
-# 📡 WebSocket
+## 🛠 Stack Tecnológica
 
-Conexão:
+### Backend (API & WebSocket Broker)
+- **Java 21 LTS**
+- **Spring Boot 4.1.x**
+- **Spring Data JPA** (Persistência de Dados)
+- **Spring WebSocket** (Broker simples de mensageria com STOMP)
+- **H2 Database / PostgreSQL** (Bancos suportados)
+- **Maven** (Gerenciamento de Dependências)
 
-```
-/ws
-```
-
-Enviar localização:
-
-```
-/app/entregas/{id}/localizacao
-```
-
-Receber localização:
-
-```
-/topic/entregas/{id}
-```
-
----
-
-# 📌 Próximas implementações
-
-- [x] CRUD de Pedidos
-- [x] CRUD de Entregadores
-- [x] CRUD de Entregas
-- [x] Histórico de Localizações
-- [x] WebSocket em tempo real
-
-### Em desenvolvimento
-
-- [ ] Bean Validation
-- [ ] ControllerAdvice
-- [ ] Exceções customizadas
-- [ ] Spring Security + JWT
-- [ ] Autorização no WebSocket
-- [ ] Swagger/OpenAPI
-- [ ] Docker
-- [ ] Deploy
-- [ ] Leaflet + OpenStreetMap
-- [ ] Geolocalização automática
-- [ ] Rastreamento em mapa
+### Frontend (Dashboard Dashboard SaaS)
+- **React 19** & **TypeScript**
+- **Vite** (Build Tool e Servidor de Desenvolvimento super rápido)
+- **Tailwind CSS v4** (Estilização baseada em tokens com tema Dark elegante)
+- **Framer Motion** (Micro-animações de eventos logísticos)
+- **Leaflet & React Leaflet** (Mapas interativos)
+- **Recharts** (Visualização gráfica da atividade de entregas)
+- **@stomp/stompjs & sockjs-client** (Cliente robusto de WebSocket)
 
 ---
 
-# 🎯 Objetivo
+## 🚀 Como Executar o Projeto
 
-Desenvolver uma API moderna para gerenciamento e monitoramento de entregas em tempo real, aplicando boas práticas de arquitetura, comunicação assíncrona com WebSocket e persistência de dados utilizando o ecossistema Spring.
+### Pré-requisitos
+- **JDK 21** instalado
+- **Node.js 18+** instalado
 
 ---
 
-# 👨‍💻 Autor
+### Passo 1: Executar o Backend (Spring Boot)
 
-**Alexsander Santos**
+1. Entre no diretório raiz do projeto.
+2. Certifique-se de configurar a variável `JAVA_HOME` para o JDK 21 se o terminal não o encontrar.
+3. A aplicação está configurada para usar **banco em memória H2** por padrão no desenvolvimento, eliminando a necessidade de instalar bancos de dados extras.
+4. Execute o Maven Wrapper:
+   ```bash
+   .\mvnw spring-boot:run
+   ```
+5. A API estará pronta e escutando na porta **`http://localhost:8080`**.
+6. O console de visualização direta das tabelas do banco H2 fica disponível em `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:entregas_api`).
 
-- LinkedIn: www.linkedin.com/in/alexsander-santos-b010051b5
+---
+
+### Passo 2: Executar o Frontend (React + Vite)
+
+1. Navegue até a pasta do frontend:
+   ```bash
+   cd frontend
+   ```
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Inicie o servidor de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+4. O painel estará disponível para acesso em:
+   👉 **[http://localhost:5173](http://localhost:5173)**
+
+---
+
+## 🧑‍💻 Autores
+- **Alexsander Santos** - [LinkedIn](https://www.linkedin.com/in/alexsander-santos-b010051b5)
+- **Wallace Coimbra** - Desenvolvedor & Mantenedor
