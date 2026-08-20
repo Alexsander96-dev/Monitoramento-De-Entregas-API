@@ -216,3 +216,4 @@ Desenvolver uma API moderna para gerenciamento e monitoramento de entregas em te
 **Alexsander Santos**
 //**Wallace Coimbra**
 - LinkedIn: www.linkedin.com/in/alexsander-santos-b010051b5
+- LinkedIn: www.linkedin.com/in/wallace-coimbra2105
