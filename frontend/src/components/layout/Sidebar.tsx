@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Package, Radio, Map, Clock, Settings,
-  ChevronLeft, ChevronRight, Truck
+  ChevronLeft, ChevronRight, Scooter
 } from 'lucide-react';
 import type { ConnectionStatus } from '../../types';
 import { cn } from '../../lib/utils';
@@ -41,7 +41,7 @@ export function Sidebar({ connectionStatus, messagesReceived }: SidebarProps) {
       <div className="flex items-center gap-3 px-5 h-16 border-b" style={{ borderColor: 'var(--color-border-subtle)' }}>
         <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
           style={{ background: 'var(--color-accent)' }}>
-          <Truck size={18} className="text-white" />
+          <Scooter size={18} className="text-white" />
         </div>
         <AnimatePresence>
           {!collapsed && (
