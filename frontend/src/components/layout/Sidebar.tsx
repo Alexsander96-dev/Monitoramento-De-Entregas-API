@@ -59,7 +59,7 @@ export function Sidebar({ connectionStatus, messagesReceived }: SidebarProps) {
               exit={{ opacity: 0, width: 0 }}
               className="font-bold text-lg whitespace-nowrap overflow-hidden"
             >
-              TrackFlow
+              MotoTrack
             </motion.span>
           )}
         </AnimatePresence>

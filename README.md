@@ -1,4 +1,4 @@
-# 🚚 TrackFlow — Plataforma de Monitoramento Logístico em Tempo Real
+# 🏍️ MotoTrack — Plataforma de Monitoramento de Motoboys em Tempo Real
 
 <p align="center">
   <img src="https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk" alt="Java 21" />
@@ -13,7 +13,7 @@
 
 ## 📋 Sobre o Projeto
 
-O **TrackFlow** é uma solução corporativa de alta performance para monitoramento e gestão logística em tempo real. A plataforma permite gerenciar pedidos, alocar entregadores, atualizar o status das rotas e rastrear graficamente a geolocalização dos entregadores no mapa à medida que as coordenadas são transmitidas via conexões WebSocket bidirecionais estáveis.
+O **MotoTrack** é uma solução corporativa de alta performance para monitoramento e rastreamento de entregas por motoboys em tempo real. A plataforma permite gerenciar pedidos, alocar entregadores, atualizar o status das rotas e rastrear graficamente a geolocalização dos motoboys no mapa à medida que as coordenadas são transmitidas via conexões WebSocket bidirecionais estáveis.
 
 O ecossistema divide-se em um **Backend robusto em Java com Spring Boot** (responsável pelo gerenciamento transacional de dados e mensageria WebSocket) e um **Frontend moderno em React com TypeScript** inspirado nos melhores dashboards SaaS de observabilidade logística do mercado.
 
@@ -50,7 +50,7 @@ O ecossistema divide-se em um **Backend robusto em Java com Spring Boot** (respo
 
 ```
                         ┌─────────────────────────────────┐
-                        │      TrackFlow React Client     │
+                        │      MotoTrack React Client     │
                         │       (Vite + TS + Tailwind)    │
                         └───────┬─────────────────▲───────┘
                                 │                 │

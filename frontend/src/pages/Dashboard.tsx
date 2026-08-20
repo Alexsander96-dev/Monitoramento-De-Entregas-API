@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Package, Truck, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Package, Scooter, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { StatsCard } from '../components/dashboard/StatsCard';
 import { ActivityChart } from '../components/dashboard/ActivityChart';
 import { EventTimeline } from '../components/monitoring/EventTimeline';
@@ -61,7 +61,7 @@ export function DashboardPage({ events }: DashboardPageProps) {
           value={stats.emTransito}
           change="Ativas agora"
           changeType="neutral"
-          icon={Truck}
+          icon={Scooter}
           iconColor="text-emerald-400"
           iconBg="bg-emerald-500/10"
           index={1}

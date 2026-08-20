@@ -33,7 +33,7 @@ export function formatTime(date: Date): string {
 export const statusEntregaConfig: Record<StatusEntrega, { label: string; color: string; bgColor: string; emoji: string }> = {
   [StatusEntrega.CRIADO]: { label: 'Criado', color: 'text-blue-400', bgColor: 'bg-blue-500/10 border-blue-500/20', emoji: '📋' },
   [StatusEntrega.AGUARDANDO_ENTREGADOR]: { label: 'Aguardando', color: 'text-amber-400', bgColor: 'bg-amber-500/10 border-amber-500/20', emoji: '⏳' },
-  [StatusEntrega.EM_ROTA]: { label: 'Em Trânsito', color: 'text-emerald-400', bgColor: 'bg-emerald-500/10 border-emerald-500/20', emoji: '🚚' },
+  [StatusEntrega.EM_ROTA]: { label: 'Em Trânsito', color: 'text-emerald-400', bgColor: 'bg-emerald-500/10 border-emerald-500/20', emoji: '🏍️' },
   [StatusEntrega.ENTREGUE]: { label: 'Entregue', color: 'text-green-400', bgColor: 'bg-green-500/10 border-green-500/20', emoji: '✅' },
   [StatusEntrega.CANCELADO]: { label: 'Cancelado', color: 'text-red-400', bgColor: 'bg-red-500/10 border-red-500/20', emoji: '❌' },
   [StatusEntrega.FALHA]: { label: 'Falha', color: 'text-rose-400', bgColor: 'bg-rose-500/10 border-rose-500/20', emoji: '⚠️' },
