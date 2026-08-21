@@ -3,10 +3,11 @@ import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Package, Radio, Map, Clock, Settings,
-  ChevronLeft, ChevronRight
+  ChevronLeft, ChevronRight, LogOut
 } from 'lucide-react';
 import type { ConnectionStatus } from '../../types';
 import { cn } from '../../lib/utils';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface SidebarProps {
   connectionStatus: ConnectionStatus;
@@ -24,6 +25,7 @@ const menuItems = [
 
 export function Sidebar({ connectionStatus, messagesReceived }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
+  const { logout, user } = useAuth();
 
   const isConnected = connectionStatus === 'CONNECTED';
 
@@ -132,6 +134,28 @@ export function Sidebar({ connectionStatus, messagesReceived }: SidebarProps) {
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+
+        {/* User / Logout */}
+        <div className="mt-2 pt-2 border-t" style={{ borderColor: 'var(--color-border-subtle)' }}>
+          <button
+            onClick={logout}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+          >
+            <LogOut size={18} className="flex-shrink-0" />
+            <AnimatePresence>
+              {!collapsed && (
+                <motion.span
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  className="text-sm font-medium whitespace-nowrap overflow-hidden text-left flex-1"
+                >
+                  Sair
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
         </div>
 
         {/* Collapse toggle */}
