@@ -8,22 +8,29 @@ import { MonitoringPage } from './pages/Monitoring';
 import { MapPage } from './pages/Map';
 import { HistoryPage } from './pages/History';
 import { SettingsPage } from './pages/Settings';
+import { LoginPage } from './pages/LoginPage';
+import { AuthProvider } from './contexts/AuthContext';
+import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 export default function App() {
   const ws = useWebSocket();
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          element={
-            <MainLayout
-              connectionStatus={ws.status}
-              messagesReceived={ws.messagesReceived}
-              eventsCount={ws.events.length}
-            />
-          }
-        >
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          
+          <Route element={<ProtectedRoute />}>
+            <Route
+              element={
+                <MainLayout
+                  connectionStatus={ws.status}
+                  messagesReceived={ws.messagesReceived}
+                  eventsCount={ws.events.length}
+                />
+              }
+            >
           <Route index element={<DashboardPage events={ws.events} />} />
           <Route path="entregas" element={<DeliveriesPage />} />
           <Route
@@ -57,8 +64,9 @@ export default function App() {
           <Route path="mapa" element={<MapPage />} />
           <Route path="historico" element={<HistoryPage />} />
           <Route path="configuracoes" element={<SettingsPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
