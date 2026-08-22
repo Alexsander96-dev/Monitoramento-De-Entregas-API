@@ -64,6 +64,7 @@ export default function App() {
           <Route path="mapa" element={<MapPage />} />
           <Route path="historico" element={<HistoryPage />} />
           <Route path="configuracoes" element={<SettingsPage />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
