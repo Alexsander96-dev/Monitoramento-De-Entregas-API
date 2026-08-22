@@ -11,13 +11,16 @@ import { SettingsPage } from './pages/Settings';
 import { LoginPage } from './pages/LoginPage';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
+import { Toaster } from 'sonner';
 
 export default function App() {
   const ws = useWebSocket();
 
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <>
+      <Toaster theme="dark" position="top-right" />
+      <AuthProvider>
+        <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           
@@ -69,5 +72,6 @@ export default function App() {
         </Routes>
       </BrowserRouter>
     </AuthProvider>
+    </>
   );
 }

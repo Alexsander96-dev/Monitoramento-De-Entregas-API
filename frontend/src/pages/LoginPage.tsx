@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, User, Loader2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,11 +9,15 @@ export function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.from?.pathname || '/';
+
+  if (isAuthenticated) {
+    return <Navigate to={from} replace />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +31,6 @@ export function LoginPage() {
       const success = await login(username, password);
       if (success) {
         toast.success('Login realizado com sucesso!');
-        navigate(from, { replace: true });
       } else {
         toast.error('Credenciais inválidas. Tente novamente.');
       }
