@@ -69,10 +69,13 @@ export function LoginPage() {
                 strokeLinejoin="round" 
                 className="w-8 h-8 text-white"
               >
-                <path d="M5 16c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2h1l2-4h5l3 4h3c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2h-1"/>
-                <circle cx="7" cy="17" r="3"/>
-                <circle cx="17" cy="17" r="3"/>
-                <path d="M11 10h4"/>
+                <circle cx="5" cy="18" r="3" />
+                <circle cx="19" cy="18" r="3" />
+                <path d="M10 18h4" />
+                <path d="M12 18l-2-5h5l2 5" />
+                <path d="M19 18l-3-9h-3" />
+                <path d="M14 9H9l-2 4h7z" />
+                <rect x="5" y="9" width="5" height="5" rx="1" />
               </svg>
             </motion.div>
             <h1 className="text-3xl font-bold text-white tracking-tight">MotoTrack</h1>
