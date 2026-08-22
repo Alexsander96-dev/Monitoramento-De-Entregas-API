@@ -41,17 +41,8 @@ export function Sidebar({ connectionStatus, messagesReceived }: SidebarProps) {
     >
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 h-16 border-b" style={{ borderColor: 'var(--color-border-subtle)' }}>
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-          style={{ background: 'var(--color-accent)' }}>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-            <circle cx="5" cy="18" r="3" />
-            <circle cx="19" cy="18" r="3" />
-            <path d="M10 18h4" />
-            <path d="M12 18l-2-5h5l2 5" />
-            <path d="M19 18l-3-9h-3" />
-            <path d="M14 9H9l-2 4h7z" />
-            <rect x="5" y="9" width="5" height="5" rx="1" />
-          </svg>
+        <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
+          <img src="/favicon.svg" alt="MotoTrack Logo" className="w-full h-full object-contain" />
         </div>
         <AnimatePresence>
           {!collapsed && (
