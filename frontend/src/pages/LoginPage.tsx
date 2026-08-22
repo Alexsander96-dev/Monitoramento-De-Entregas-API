@@ -52,32 +52,14 @@ export function LoginPage() {
       >
         <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl">
           <div className="flex flex-col items-center mb-8">
-            <motion.div 
+            <motion.img 
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30"
-            >
-              {/* Motorcycle Custom SVG Logo */}
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                className="w-8 h-8 text-white"
-              >
-                <circle cx="5" cy="18" r="3" />
-                <circle cx="19" cy="18" r="3" />
-                <path d="M10 18h4" />
-                <path d="M12 18l-2-5h5l2 5" />
-                <path d="M19 18l-3-9h-3" />
-                <path d="M14 9H9l-2 4h7z" />
-                <rect x="5" y="9" width="5" height="5" rx="1" />
-              </svg>
-            </motion.div>
+              src="/favicon.svg"
+              alt="MotoTrack Logo"
+              className="w-16 h-16 mb-4 shadow-lg shadow-indigo-500/20 rounded-xl"
+            />
             <h1 className="text-3xl font-bold text-white tracking-tight">MotoTrack</h1>
             <p className="text-slate-400 mt-2 text-center">
               Acesso exclusivo para motoboys e gestão
