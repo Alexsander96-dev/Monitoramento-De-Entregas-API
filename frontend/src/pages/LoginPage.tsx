@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, User, Loader2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,11 +9,15 @@ export function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.from?.pathname || '/';
+
+  if (isAuthenticated) {
+    return <Navigate to={from} replace />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +31,6 @@ export function LoginPage() {
       const success = await login(username, password);
       if (success) {
         toast.success('Login realizado com sucesso!');
-        navigate(from, { replace: true });
       } else {
         toast.error('Credenciais inválidas. Tente novamente.');
       }
@@ -52,29 +55,14 @@ export function LoginPage() {
       >
         <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl">
           <div className="flex flex-col items-center mb-8">
-            <motion.div 
+            <motion.img 
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30"
-            >
-              {/* Motorcycle Custom SVG Logo */}
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                className="w-8 h-8 text-white"
-              >
-                <path d="M5 16c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2h1l2-4h5l3 4h3c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2h-1"/>
-                <circle cx="7" cy="17" r="3"/>
-                <circle cx="17" cy="17" r="3"/>
-                <path d="M11 10h4"/>
-              </svg>
-            </motion.div>
+              src="/favicon.svg"
+              alt="MotoTrack Logo"
+              className="w-16 h-16 mb-4 shadow-lg shadow-indigo-500/20 rounded-xl"
+            />
             <h1 className="text-3xl font-bold text-white tracking-tight">MotoTrack</h1>
             <p className="text-slate-400 mt-2 text-center">
               Acesso exclusivo para motoboys e gestão

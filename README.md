@@ -135,7 +135,7 @@ O ecossistema divide-se em um **Backend robusto em Java com Spring Boot** (respo
    npm run dev
    ```
 4. O painel estará disponível para acesso em:
-   👉 **[http://localhost:5173](http://localhost:5173)**
+   👉 **[http://localhost:5173]http://localhost:5173**
 
 ---
 
